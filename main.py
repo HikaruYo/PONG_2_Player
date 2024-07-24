@@ -177,7 +177,7 @@ while True:
     player1_text = game_font.render(f"Player 1 = {player1_score}", False, light_grey)
     screen.blit(player1_text, (660,470))
     
-    player2_text = game_font.render(f"player 2 = {player2_score}", False, light_grey)
+    player2_text = game_font.render(f"Player 2 = {player2_score}", False, light_grey)
     screen.blit(player2_text, (160,470))
     
     
