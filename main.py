@@ -130,6 +130,7 @@ score_sound = pygame.mixer.Sound("ScoreUp.mp3")
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            print("Thanks For Playing!")
             pygame.quit()
             sys.exit()
             
@@ -181,6 +182,10 @@ while True:
     screen.blit(player2_text, (160,470))
     
     if player1_score | player2_score >= 10:
+        print("Game Finished!")
+        print("Player 1 Score : " + str(player1_score))
+        print("Player 2 Score : " + str(player2_score))
+        print("Thanks For Playing!")
         pygame.quit()
         sys.exit()
     
