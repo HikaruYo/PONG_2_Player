@@ -180,6 +180,10 @@ while True:
     player2_text = game_font.render(f"Player 2 = {player2_score}", False, light_grey)
     screen.blit(player2_text, (160,470))
     
+    if player1_score | player2_score >= 10:
+        pygame.quit()
+        sys.exit()
+    
     
     pygame.display.flip()
     clock.tick(60)
