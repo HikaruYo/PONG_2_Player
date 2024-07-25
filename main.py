@@ -1,31 +1,30 @@
-# THE CONTROL FOR PLAYER 1 ( RIGHT SIDE ) IS KEY_UP FOR GO UP, AND KEY_DOWN FOR GO DOWN
-# AND FOR THE PLAYER 2 ( LEFT SIDE ) IS W FOR GO UP, AND S FOR GO DOWN
-
-
 import pygame, sys, random
 
-# Animasi bola
 def ball_animation():
     global ball_speed_x, ball_speed_y, player1_score, player2_score, score_time
     ball.x += ball_speed_x
     ball.y += ball_speed_y
     
+    # Memberi suara jika bola memantul
     if ball.top <= 0 or ball.bottom >= screen_height:
         pygame.mixer.Sound.play(pong_sound)
         ball_speed_y *= -1
         
-    # Player Score
+    # Player 1 Score
     if ball.left <= 0:
         pygame.mixer.Sound.play(score_sound)
         player1_score += 1
+        player2_score -= 1
         score_time = pygame.time.get_ticks()
         
-    # Computer Score
+    # Player 2 Score
     if ball.right >= screen_width:
         pygame.mixer.Sound.play(score_sound)
         player2_score += 1
+        player1_score -= 1
         score_time = pygame.time.get_ticks()
         
+    # Bola memantul di object player 1
     if ball.colliderect(player1) and ball_speed_x > 0:
         pygame.mixer.Sound.play(pong_sound)
         if abs(ball.right - player1.left) < 10:
@@ -34,7 +33,8 @@ def ball_animation():
             ball_speed_y *= -1
         elif abs(ball.top - player1.bottom) < 10 and ball_speed_y < 10:
             ball_speed_y *= -1
-        
+    
+    # Bola memantul di object player 2
     if ball.colliderect(player2) and ball_speed_x < 0:
         pygame.mixer.Sound.play(pong_sound)
         if abs(ball.left - player2.right) < 10:
@@ -44,7 +44,8 @@ def ball_animation():
         elif abs(ball.top - player2.bottom) < 10 and ball_speed_y < 10:
             ball_speed_y *= -1
 
-# Animaasi player
+
+# Animasi pergerakan object player 1
 def player1_animation():
     player1.y += player1_speed
     if player1.top <= 0:
@@ -52,7 +53,7 @@ def player1_animation():
     if player1.bottom >= screen_height:
         player1.bottom = screen_height
 
-# Animasi Computer
+# Animasi pergerakan object player 1
 def player2_animation():
     player2.y += player2_speed
     if player2.top <= 0:
@@ -60,24 +61,24 @@ def player2_animation():
     if player2.bottom >= screen_height:
         player2.bottom = screen_height
 
+
 def ball_start():
     global ball_speed_x, ball_speed_y, current_time, score_time, number_three
-    
     current_time = pygame.time.get_ticks()
     ball.center = (screen_width/2, screen_height/2)
-    
+     
+    # Hitung mundur sebelum bola bergerak
     if current_time - score_time < 700:
         number_three = game_font.render("3", False, light_grey)
         screen.blit(number_three,(screen_width/2 - 10, screen_height/2 + 20))
-        
     if 700 < current_time - score_time < 1400:
         number_two = game_font.render("2", False, light_grey)
         screen.blit(number_two,(screen_width/2 - 10, screen_height/2 + 20))
-    
     if 1400 < current_time - score_time < 2100:
         number_one = game_font.render("1", False, light_grey)
         screen.blit(number_one,(screen_width/2 - 10, screen_height/2 + 20))
     
+    # Logic untuk membuat bola bergerak ke arah kanan atau kiri saat game dimulai
     if current_time - score_time <2100:
         ball_speed_x, ball_speed_y = 0, 0
     else:
@@ -128,44 +129,47 @@ score_sound = pygame.mixer.Sound("ScoreUp.mp3")
 
 
 while True:
+    # Mengambil aksi dari player
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            print("Thanks For Playing!")
+            if player1_score > player2_score:
+                print("=====================\nGame Finished!\nPlayer 1 Win!")
+            else:
+                print("=====================\nGame Finished!\nPlayer 2 Win!")
+            print("Thanks For Playing!\n=====================")
             pygame.quit()
             sys.exit()
             
+        # Player 1 key
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
                 player1_speed += 7
             if event.key == pygame.K_UP:
                 player1_speed -= 7
-        
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
                 player1_speed -= 7
             if event.key == pygame.K_UP:
                 player1_speed += 7
+                 
+        # Player 2 key
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_s:
+                player2_speed += 6
+            if event.key == pygame.K_w:
+                player2_speed -= 6
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_s:
+                player2_speed -= 6
+            if event.key == pygame.K_w:
+                player2_speed += 6
                 
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-            
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_s:
-                player2_speed += 6
-            if event.key == pygame.K_w:
-                player2_speed -= 6
-        
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_s:
-                player2_speed -= 6
-            if event.key == pygame.K_w:
-                player2_speed += 6
-            
+
     ball_animation()
     player1_animation()
     player2_animation()
        
+    # Merender seluruh object di dalam game
     screen.fill(bg_color)
     pygame.draw.rect(screen, light_grey, player1)
     pygame.draw.rect(screen, light_grey, player2)
@@ -175,17 +179,24 @@ while True:
     if score_time:
         ball_start()
     
+    # Menampilkan score player 1 di dalam game
     player1_text = game_font.render(f"Player 1 = {player1_score}", False, light_grey)
     screen.blit(player1_text, (660,470))
     
+    # Menampilkan score player 2 di dalam game
     player2_text = game_font.render(f"Player 2 = {player2_score}", False, light_grey)
     screen.blit(player2_text, (160,470))
-    
-    if player1_score | player2_score >= 10:
-        print("Game Finished!")
-        print("Player 1 Score : " + str(player1_score))
-        print("Player 2 Score : " + str(player2_score))
-        print("Thanks For Playing!")
+
+        
+    # Player 1 Win dengan score lebih dari 10
+    if player1_score == 10:
+        print("=====================\nGame Finished!\nPlayer 1 Win!\nThanks For Playing!\n=====================")
+        pygame.quit()
+        sys.exit()
+        
+    # Player 2 Win dengan score lebih dari 10
+    if player2_score == 10:
+        print("=====================\nGame Finished!\nPlayer 2 Win!\nThanks For Playing!\n=====================")
         pygame.quit()
         sys.exit()
     
