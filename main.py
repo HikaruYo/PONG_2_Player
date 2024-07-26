@@ -133,9 +133,17 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             if player1_score > player2_score:
-                print("=====================\nGame Finished!\nPlayer 1 Win!")
+                print("=====================")
+                print("Game Finished!")
+                print("Player 1 Score : " + str(player1_score))
+                print("Player 2 Score : " + str(player2_score))
+                print("Player 1 Win!")
             else:
-                print("=====================\nGame Finished!\nPlayer 2 Win!")
+                print("=====================")
+                print("Game Finished!")
+                print("Player 1 Score : " + str(player1_score))
+                print("Player 2 Score : " + str(player2_score))
+                print("Player 2 Win!")
             print("Thanks For Playing!\n=====================")
             pygame.quit()
             sys.exit()
@@ -189,14 +197,26 @@ while True:
 
         
     # Player 1 Win dengan score lebih dari 10
-    if player1_score == 10:
-        print("=====================\nGame Finished!\nPlayer 1 Win!\nThanks For Playing!\n=====================")
+    if player1_score == 1:
+        print("=====================")
+        print("Game Finished!")
+        print("Player 1 Score : " + str(player1_score))
+        print("Player 2 Score : " + str(player2_score))
+        print("Player 1 Win!")
+        print("Thanks For Playing!")
+        print("=====================")
         pygame.quit()
         sys.exit()
         
     # Player 2 Win dengan score lebih dari 10
     if player2_score == 10:
-        print("=====================\nGame Finished!\nPlayer 2 Win!\nThanks For Playing!\n=====================")
+        print("=====================")
+        print("Game Finished!")
+        print("Player 1 Score : " + str(player1_score))
+        print("Player 2 Score : " + str(player2_score))
+        print("Player 2 Win!")
+        print("Thanks For Playing!")
+        print("=====================")
         pygame.quit()
         sys.exit()
     
